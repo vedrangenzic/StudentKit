@@ -4,8 +4,7 @@
     "slug": "StudentKit",
     "platforms": [
       "ios",
-      "android",
-      "web"
+      "android"
     ],
     "version": "1.0.0",
     "orientation": "portrait",
@@ -23,6 +22,10 @@
     ],
     "ios": {
       "supportsTablet": true
+    },
+    "androidNavigationBar": {
+      "barStyle": "light-content",
+      "backgroundColor": "#191B1F"
     }
   }
 }

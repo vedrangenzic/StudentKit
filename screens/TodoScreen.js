@@ -1,12 +1,17 @@
 import React, { Component } from 'react';
-import { StyleSheet, TextInput, View, Button, Text } from 'react-native';
+import { StyleSheet, TextInput, View, Button } from 'react-native';
+import { Text, TouchableOpacity, FlatList } from 'react-native';
+import data from '../TempData';
+import Todo from '../components/Todo';
+import ErrorBoundary from 'react-native-error-boundary'
+
 
 export default class TodoScreen extends Component {
-    render(){
+  render() {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Todo!</Text>
-      </View>
-    );
+     <ErrorBoundary>
+       <Todo />
+     </ErrorBoundary>  
+    ); 
   }
 }
