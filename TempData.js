@@ -1,24 +1,31 @@
-data = [
+const data = [
     {
-        id: 1,
-        title: 'Do homework',
-        completed: false
+        name: "ALATNICA-MIKUŠ",
+        coords: {
+            "latitude": 45.827516,
+            "longitude": 16.140521
+        }
     },
     {
-        id: 2,
-        title: 'Study test',
-        completed: false
+        name: "FERO-TERM",
+        coords: {
+            "latitude": 45.827748,
+            "longitude": 16.098970
+        }
     },
     {
-        id: 3,
-        title: 'Make new seminar',
-        completed: false
+        name: "KONZUM",
+        coords: {
+            "latitude": 45.82668,
+            "longitude": 16.1097963
+        }
     },
     {
-        id: 4,
-        title: 'Create presentation',
-        completed: false
+        name: "PETROL",
+        coords: {
+            "latitude": 45.82404,
+            "longitude": 16.1293333
+        }
     },
-
 ]
 export default data;

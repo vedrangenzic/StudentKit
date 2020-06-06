@@ -1,18 +1,48 @@
 import React, { Component } from 'react';
 import { StyleSheet, TextInput, View, Button, Text } from 'react-native';
-import MapView from 'react-native-maps';
+import * as Permissions from 'expo-permissions';
+import * as Location from 'expo-location';
+import Map from '../components/Map';
+import get from 'lodash/get';
+import pick from 'lodash/pick';
+import data from '../TempData'
 
 export default class MapScreen extends Component {
-    render(){
+  state = {
+    location: null,
+    errorMessage: null,
+    restaurants: []
+  };
+
+  componentDidMount = () => {
+    this.getLocationAsync();
+};
+
+  getRestaurants = async () => {
+    const coords = get(this.state.location, 'coords');
+    const userLocation = pick(coords, ['latitude', 'longitude']);
+    let restaurants = data;
+    this.setState({ restaurants });
+  };
+
+  getLocationAsync = async () => {
+    let { status } = await Permissions.askAsync(Permissions.LOCATION);
+    if (status !== 'granted') {
+      this.setState({
+        errorMessage: 'Permission to access location was denied'
+      });
+    }
+    let location = await Location.getCurrentPositionAsync({});
+    this.setState({ location });
+    this.getRestaurants();
+  };
+
+
+  render() {
+    const { location, restaurants } = this.state;
     return (
-      <MapView style={{flex:1}}
-      initialRegion={{
-        latitude: 37.78825,
-        longitude: -122.4324,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-      }}
-    />
+      <Map location={location} places={restaurants}
+      />
     );
   }
 }

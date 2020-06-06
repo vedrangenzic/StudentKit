@@ -74,7 +74,7 @@ const AddCounter = () => {
                                             style={{ marginLeft: 15 }}
                                         />
                                     </TouchableOpacity>
-                                    <View>
+                                    <View style={styles.content}>
                                         <Text style={styles.task}>{item.text}</Text>
                                         <Text style={styles.count}> {item.count}</Text>
                                     </View>
@@ -97,7 +97,7 @@ const AddCounter = () => {
                     style={{ padding: 30, backgroundColor: '#191B1F', borderRightWidth: 0, borderColor: 'black', color: "#BBBDBF" }}
                     multiline={true}
                     onChangeText={(value) => setValue(value)}
-                    placeholder={'Add new task here...'}
+                    placeholder={'Add new class here...'}
                     placeholderTextColor="#BBBDBF"
                     value={value}
                 />
@@ -182,6 +182,9 @@ const styles = StyleSheet.create({
     count: {
         paddingLeft: 45,
         paddingTop: 2
+    },
+    content:{
+        justifyContent: "center"
     }
 
 
