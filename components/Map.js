@@ -18,7 +18,6 @@ const initialRegion = {
     latitude: 37.321996988,
     longitude: -122.0325472123455
 };
-const GOOGLE_MAPS_APIKEY = "AIzaSyDdEd4BqM7aHi4C6scPUcO8lxGu7sxdhtw";
 
 export default class Map extends Component {
     state = {
