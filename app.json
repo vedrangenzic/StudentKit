@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "HelloWorld",
-    "slug": "StudentKit",
+    "name": "StudentKit",
+    "slug": "student-kit",
     "platforms": [
       "ios",
       "android"

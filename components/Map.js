@@ -26,32 +26,32 @@ export default class Map extends Component {
 
     handleGetDirections = (id) => {
         const data = {
-           source: {
-            latitude: this.props.location.latitude,
-            longitude: this.props.location.longitude
-          },
-          destination: {
-            latitude: this.props.places[id].coords.latitude,
-            longitude: this.props.places[id].coords.longitude
-          },
-          params: [
-            {
-              key: "travelmode",
-              value: "driving"        // may be "walking", "bicycling" or "transit" as well
+            source: {
+                latitude: this.props.location.latitude,
+                longitude: this.props.location.longitude
             },
-            {
-              key: "dir_action",
-              value: "navigate"       // this instantly initializes navigation using the given travel mode
-            }
-          ],
+            destination: {
+                latitude: this.props.places[id].coords.latitude,
+                longitude: this.props.places[id].coords.longitude
+            },
+            params: [
+                {
+                    key: "travelmode",
+                    value: "driving"        // may be "walking", "bicycling" or "transit" as well
+                },
+                {
+                    key: "dir_action",
+                    value: "navigate"       // this instantly initializes navigation using the given travel mode
+                }
+            ],
         }
-     
+
         getDirections(data)
-      }
+    }
 
     renderMarkers() {
         return this.props.places.map((place, i) => (
-            
+
             <Marker
                 key={i}
                 title={place.name}
@@ -62,8 +62,8 @@ export default class Map extends Component {
                     <View>
                         <View style={styles.bubble}>
                             <View>
-                            <Text style={styles.name}>{place.name}</Text>                            
-                            <Text>A short description</Text>
+                                <Text style={styles.name}>{place.name}</Text>
+                                <Text>A short description</Text>
                             </View>
                             <MaterialCommunityIcons name="bullseye-arrow" size={40} color="dodgerblue" />
                         </View>
@@ -92,7 +92,6 @@ export default class Map extends Component {
             <MapView
                 style={styles.container}
                 region={region}
-                initialRegion={{ ...initialRegion, ...deltas }}
                 showsUserLocation
                 showsMyLocationButton
             >
@@ -110,7 +109,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignSelf: 'flex-start',
         backgroundColor: '#fff',
-        justifyContent:'space-between',
+        justifyContent: 'space-between',
         borderRadius: 6,
         borderColor: '#ccc',
         borderWidth: 0.5,

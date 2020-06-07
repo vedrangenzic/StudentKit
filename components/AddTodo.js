@@ -1,5 +1,5 @@
-import React, { Component, useState } from 'react';
-import { StyleSheet, TextInput, View, Button, Modal, KeyboardAvoidingView } from 'react-native';
+import React, { Component, useState, useEffect } from 'react';
+import { StyleSheet, TextInput, View, Button, Modal, AsyncStorage, Keyboard } from 'react-native';
 import { Text, TouchableOpacity, FlatList, SafeAreaView } from 'react-native';
 import { AntDesign, Entypo } from '@expo/vector-icons';
 import data from '../TempData';
@@ -8,14 +8,94 @@ import { LinearGradient } from 'expo-linear-gradient';
 const AddTodo = () => {
     const [value, setValue] = useState('')
     const [todos, setTodos] = useState([])
-    handleAddTodo = () => {
+
+    useEffect(() => {
+        loadTodo();
+    });
+
+    const updateAsyncStorage = async (todos) => {
+
+        return new Promise(async (resolve, reject) => {
+
+            try {
+
+                await AsyncStorage.removeItem('todos');
+                await AsyncStorage.setItem('todos', JSON.stringify(todos));
+                return resolve(true);
+
+            } catch (e) {
+                return reject(e);
+            }
+
+        });
+
+    }
+
+    const addTodo = async () => {
+
+        if (value.length <= 0)
+            return;
+
+        try {
+
+            todos.push({ text: value, key: Math.random().toString(), checked: false });
+            await updateAsyncStorage(todos);
+
+
+        } catch (err) {
+
+            console.log(err);
+
+        }
+
+    }
+    const loadTodo = async () => {
+        try {
+
+            const todos = await AsyncStorage.getItem('todos');
+            if (todos && todos.length > 0) {
+                setTodos(JSON.parse(todos))
+
+            }
+
+        } catch (err) {
+
+            console.log(err)
+
+        }
+    }
+    const removeTodo = (id) => {
+        try {
+            todos.map( async (todo, i) => {
+            
+            if(todo.key == id){
+            let index = todos.indexOf(todo);
+            todos.splice(index, 1)
+            await updateAsyncStorage(todos);
+            setTodos(todos);
+
+
+
+            }
+            });
+
+
+
+        } catch (err) {
+            alert(err);
+
+        }
+    }
+
+
+    const handleAddTodo = () => {
         if (value.length > 0) {
             setTodos([{ text: value, key: todos.length.toString(), checked: false }, ...todos])
             setValue('')
         }
     }
 
-    handleDeleteTodo = (id) => {
+    const handleDeleteTodo = (id) => {
         setTodos(
             todos.filter((todo) => {
                 if (todo.key !== id) return true
@@ -23,7 +103,7 @@ const AddTodo = () => {
         )
     }
 
-    handleChecked = (id) => {
+    const handleChecked = (id) => {
         setTodos(
             todos.map((todo) => {
                 if (todo.key === id) todo.checked = !todo.checked;
@@ -31,40 +111,41 @@ const AddTodo = () => {
             })
         )
     }
+
     return (
 
         <View style={styles.container}>
             <View style={styles.todoList}>
-            <SafeAreaView >
-                <FlatList 
-                    style={styles.todoList}
-                    data={todos}
-                    renderItem={({ item }) => 
-                    <View style={styles.taskWrapper}>
-                    <TouchableOpacity onPress={() => handleChecked(item.key)}>
-                        <Entypo
-                            name={item.checked ? "circle-with-plus" : "circle"}
-                            size={30}
-                            color="#BB350F"
-                            style={{ marginLeft: 15 }}
-                        />
-                    </TouchableOpacity>
+                <SafeAreaView >
+                    <FlatList
+                        style={styles.todoList}
+                        data={todos}
+                        renderItem={({ item }) =>
+                            <View style={styles.taskWrapper}>
+                                <TouchableOpacity onPress={() => handleChecked(item.key)}>
+                                    <Entypo
+                                        name={item.checked ? "circle-with-plus" : "circle"}
+                                        size={30}
+                                        color="#BB350F"
+                                        style={{ marginLeft: 15 }}
+                                    />
+                                </TouchableOpacity>
 
-                    <View>
-                        {item.checked && <View style={styles.verticalLine}></View>}
-                        <Text style={styles.task}>{item.text}</Text>
-                    </View>
-                    <AntDesign
-                        name="closesquare"
-                        size={30}
-                        color="#BB350F"
-                        style={{ marginLeft: 25 }}
-                        onPress={() => handleDeleteTodo(item.key)}
+                                <View>
+                                    {item.checked && <View style={styles.verticalLine}></View>}
+                                    <Text style={styles.task}>{item.text}</Text>
+                                </View>
+                                <AntDesign
+                                    name="closesquare"
+                                    size={30}
+                                    color="#BB350F"
+                                    style={{ marginLeft: 25 }}
+                                    onPress={() => removeTodo(item.key)}
+                                />
+                            </View>}
+                        keyExtractor={item => item.key}
                     />
-                </View>}
-                    keyExtractor={item => item.key}
-                />
-            </SafeAreaView>
+                </SafeAreaView>
             </View>
 
             <View style={{ position: 'absolute', bottom: 0, left: 0, width: 400 }}>
@@ -82,7 +163,7 @@ const AddTodo = () => {
                     colors={['#BB350F', '#EE540F', '#DD4E0C']}
                     style={{ padding: 17, borderRadius: 50, position: 'absolute', bottom: 8, right: 8 }}
                 >
-                    <TouchableOpacity onPress={() => handleAddTodo()}>
+                    <TouchableOpacity onPress={() => addTodo()}>
                         <AntDesign name="plus" size={35} color="white" />
                     </TouchableOpacity>
                 </LinearGradient>
@@ -151,9 +232,9 @@ const styles = StyleSheet.create({
         position: 'absolute',
         marginTop: 18
     },
-    todoList:{
+    todoList: {
         flex: 1,
-        marginTop: 32      
+        marginTop: 32
     }
 
 
