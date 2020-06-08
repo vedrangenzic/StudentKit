@@ -2,7 +2,6 @@ import React, { Component, useState, useEffect } from 'react';
 import { StyleSheet, TextInput, View, Button, Modal, AsyncStorage, Keyboard } from 'react-native';
 import { Text, TouchableOpacity, FlatList, SafeAreaView } from 'react-native';
 import { AntDesign, Entypo } from '@expo/vector-icons';
-import data from '../TempData';
 import { LinearGradient } from 'expo-linear-gradient';
 
 const AddTodo = () => {
@@ -15,19 +14,15 @@ const AddTodo = () => {
 
     const updateAsyncStorage = async (todos) => {
 
-        return new Promise(async (resolve, reject) => {
-
             try {
 
                 await AsyncStorage.removeItem('todos');
                 await AsyncStorage.setItem('todos', JSON.stringify(todos));
-                return resolve(true);
-
+  
             } catch (e) {
-                return reject(e);
-            }
 
-        });
+                alert(err)
+            }
 
     }
 
@@ -38,13 +33,14 @@ const AddTodo = () => {
 
         try {
 
+            Keyboard.dismiss();
             todos.push({ text: value, key: Math.random().toString(), checked: false });
+            loadTodo();
             await updateAsyncStorage(todos);
-
-
+            
         } catch (err) {
 
-            console.log(err);
+            alert(err);
 
         }
 
@@ -66,52 +62,41 @@ const AddTodo = () => {
     }
     const removeTodo = (id) => {
         try {
-            todos.map( async (todo, i) => {
-            
-            if(todo.key == id){
-            let index = todos.indexOf(todo);
-            todos.splice(index, 1)
-            await updateAsyncStorage(todos);
-            setTodos(todos);
 
+            todos.map(async (todo, i) => {
 
+                if (todo.key == id) {
+                    let index = todos.indexOf(todo);
+                    todos.splice(index, 1)
+                    await updateAsyncStorage(todos);
+                    setTodos(todos);
+                }
 
-            }
             });
-
-
-
         } catch (err) {
             alert(err);
 
         }
     }
+    const checkedTodo = (id) => {
 
+        try {
 
-    const handleAddTodo = () => {
-        if (value.length > 0) {
-            setTodos([{ text: value, key: todos.length.toString(), checked: false }, ...todos])
-            setValue('')
+            todos.map(async (todo, i) => {
+
+                if (todo.key == id) {
+                    todo.checked = !todo.checked;
+                    await updateAsyncStorage(todos);
+                    setTodos(todos);
+                }
+
+            });
+        } catch (err) {
+            alert(err);
+
         }
     }
-
-    const handleDeleteTodo = (id) => {
-        setTodos(
-            todos.filter((todo) => {
-                if (todo.key !== id) return true
-            })
-        )
-    }
-
-    const handleChecked = (id) => {
-        setTodos(
-            todos.map((todo) => {
-                if (todo.key === id) todo.checked = !todo.checked;
-                return todo;
-            })
-        )
-    }
-
+ 
     return (
 
         <View style={styles.container}>
@@ -119,15 +104,15 @@ const AddTodo = () => {
                 <SafeAreaView >
                     <FlatList
                         style={styles.todoList}
-                        data={todos}
+                        data={todos} 
+                        keyExtractor={item => item.key}         
                         renderItem={({ item }) =>
                             <View style={styles.taskWrapper}>
-                                <TouchableOpacity onPress={() => handleChecked(item.key)}>
+                                <TouchableOpacity onPress={() => checkedTodo(item.key)}>
                                     <Entypo
                                         name={item.checked ? "circle-with-plus" : "circle"}
                                         size={30}
-                                        color="#BB350F"
-                                        style={{ marginLeft: 15 }}
+                                        color="#BB350F"                                    
                                     />
                                 </TouchableOpacity>
 
@@ -138,12 +123,11 @@ const AddTodo = () => {
                                 <AntDesign
                                     name="closesquare"
                                     size={30}
-                                    color="#BB350F"
-                                    style={{ marginLeft: 25 }}
+                                    color="#BB350F"                         
                                     onPress={() => removeTodo(item.key)}
                                 />
                             </View>}
-                        keyExtractor={item => item.key}
+                        
                     />
                 </SafeAreaView>
             </View>
@@ -208,7 +192,7 @@ const styles = StyleSheet.create({
     },
     taskWrapper: {
         marginTop: 10,
-        padding: 15,
+        padding: 20,
         flexDirection: 'row',
         borderColor: 'black',
         borderBottomWidth: .5,
@@ -226,11 +210,8 @@ const styles = StyleSheet.create({
     verticalLine: {
         borderBottomColor: 'white',
         borderBottomWidth: 1,
-        marginLeft: -30,
         zIndex: 9999,
-        width: 100,
-        position: 'absolute',
-        marginTop: 18
+
     },
     todoList: {
         flex: 1,

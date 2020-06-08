@@ -2,12 +2,12 @@ import React, { Component, useState } from 'react';
 import { StyleSheet, TextInput, View, Button, Modal, KeyboardAvoidingView } from 'react-native';
 import { Keyboard, Alert, Text, TouchableOpacity, FlatList, SafeAreaView } from 'react-native';
 import { AntDesign, Entypo } from '@expo/vector-icons';
-import data from '../TempData';
 import { LinearGradient } from 'expo-linear-gradient';
 
 const AddCounter = () => {
     const [value, setValue] = useState('')
     const [counters, setCounters] = useState([])
+    
     handleAddCounter = () => {
         if (value.length > 0) {
             setCounters([{ text: value, key: counters.length.toString(), count: 0 }, ...counters])

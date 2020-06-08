@@ -5,7 +5,7 @@ import * as Location from 'expo-location';
 import Map from '../components/Map';
 import get from 'lodash/get';
 import pick from 'lodash/pick';
-import data from '../TempData'
+import data from '../RestaurantData'
 
 export default class MapScreen extends Component {
   state = {
