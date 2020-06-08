@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions, ActivityIndicator } from 'react-native';
 import MapView, { Marker, Callout } from 'react-native-maps';
 import * as Linking from 'expo-linking';
 import * as IntentLauncher from 'expo-intent-launcher';
@@ -82,8 +82,8 @@ export default class Map extends Component {
         };
         if (!region.latitude || !region.longitude) {
             return (
-                <View>
-                    <Text>Loading map...</Text>
+                <View style={{ backgroundColor: '#191B1F', flex: 1, flexDirection: 'row', justifyContent: "center" }}>
+                    <ActivityIndicator size="large" color="#D2691E" />
                 </View>
             );
         }
@@ -117,25 +117,6 @@ const styles = StyleSheet.create({
         width: 250,
         marginBottom: 55
     },
-    // Arrow below the bubble
-    arrow: {
-        backgroundColor: 'transparent',
-        borderColor: 'transparent',
-        borderTopColor: '#fff',
-        borderWidth: 16,
-        alignSelf: 'center',
-        marginTop: -32,
-    },
-    arrowBorder: {
-        backgroundColor: 'transparent',
-        borderColor: 'transparent',
-        borderTopColor: '#007a87',
-        borderWidth: 16,
-        alignSelf: 'center',
-        marginTop: -0.5,
-        // marginBottom: -15
-    },
-    // Character name
     name: {
         fontSize: 16,
         marginBottom: 5,
