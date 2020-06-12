@@ -1,60 +1,161 @@
-import React, { Component, useState } from 'react';
-import { StyleSheet, TextInput, View, Button, Modal, KeyboardAvoidingView } from 'react-native';
+import React, { Component, useState, useEffect } from 'react';
+import { StyleSheet, TextInput, View, Button, Modal, KeyboardAvoidingView, AsyncStorage } from 'react-native';
 import { Keyboard, Alert, Text, TouchableOpacity, FlatList, SafeAreaView } from 'react-native';
 import { AntDesign, Entypo } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { set } from 'react-native-reanimated';
 
 const AddCounter = () => {
     const [value, setValue] = useState('')
     const [counters, setCounters] = useState([])
     
-    handleAddCounter = () => {
-        if (value.length > 0) {
-            setCounters([{ text: value, key: counters.length.toString(), count: 0 }, ...counters])
-            setValue('')
+    useEffect(() => {
+        if(counters != null)  loadCounters();
+    });
+
+    const updateAsyncStorage = async (counters) => {
+
+        try {
+
+            await AsyncStorage.removeItem('counters');
+            await AsyncStorage.setItem('counters', JSON.stringify(counters));
+
+        } catch (err) {
+            alert(err)
         }
-        Keyboard.dismiss()
+
     }
 
-    handleDeleteCounter = (id) => {
+    const addCounter = async () => {
+
+        if (value.length <= 0)
+            return;
+
+        try {
+         
+            Keyboard.dismiss();
+            counters.push({ text: value, key: Math.random().toString(), count: 0 });
+            await updateAsyncStorage(counters);
+            loadCounters();
+            
+        
+        } catch (err) {
+
+            alert(err);
+
+        }
+
+    }
+    const loadCounters = async () => {
+        try {
+
+            const counters = await AsyncStorage.getItem('counters');
+            if (counters && counters.length > 0) {
+                setCounters(JSON.parse(counters))
+
+            }
+
+        } catch (err) {
+
+            alert(err)
+
+        }
+    }
+    const deleteCounter = (id) => {
         Alert.alert(
             'Delete',
             'Are you sure?',
             [
                 {
-                    text: 'Yes', onPress: () => setCounters(
-                        counters.filter((counter) => {
-                            if (counter.key !== id) return true
-                        })
-                    )
+                    text: 'Yes', onPress: () => {
+                        try {
+
+                            counters.map(async (counter, i) => {
+
+                                if (counter.key == id) {
+                                    counters.splice(i, 1)
+                                    await updateAsyncStorage(counters);
+                                    setCounters(counters);
+                                }
+
+                            });
+                        } catch (err) {
+                            
+                            alert(err);
+
+                        }
+
+                    }
                 },
-                { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+                { text: 'Cancel', onPress: () => void(0), style: 'cancel' },
             ],
             { cancelable: false }
         )
-        setCounters(
-            counters.filter((counter) => {
-                if (counter.key !== id) return true
-            })
-        )
     }
 
-    handleCount = (id) => {
-        setCounters(
-            counters.map((counter) => {
-                if (counter.key === id) counter.count = counter.count + 1;
-                return counter;
-            })
-        )
+    const checkedCounter = (id) => {
+
+        try {
+
+            counters.map(async (counter, i) => {
+
+                if (counter.key == id) {
+                    counter.checked = !counter.checked;
+                    await updateAsyncStorage(counters);
+                    setCounters(counters);
+                }
+
+            });
+        } catch (err) {
+            alert(err);
+
+        }
+
     }
-    handleDecrement = (id) => {
-        setCounters(
-            counters.map((counter) => {
-                if (counter.key === id) counter.count = counter.count - 1;
-                return counter;
-            })
-        )
+
+    //added timeout to disable onPress() spam
+    const incrementCount = (id) => {
+        setTimeout(() => {
+            try {
+
+                counters.map(async (counter, i) => {
+
+                    if (counter.key == id) {
+                        counter.count = counter.count + 1;
+                        await updateAsyncStorage(counters);
+                        setCounters(counters);
+                    }
+
+                });
+            } catch (err) {
+                alert(err);
+
+            }
+        }, 300)
     }
+
+    //added timeout to disable onPress() spam
+    const decrementCount = (id) => {
+        setTimeout(() => {
+
+            try {
+
+                counters.map(async (counter, i) => {
+
+                    if (counter.key == id) {
+                        counter.count = counter.count - 1;
+                        await updateAsyncStorage(counters);
+                        setCounters(counters);
+                    }
+
+                });
+            } catch (err) {
+                alert(err);
+
+            }
+        }, 300)
+    }
+
     return (
 
         <View style={styles.container}>
@@ -64,9 +165,9 @@ const AddCounter = () => {
                         style={styles.todoList}
                         data={counters}
                         renderItem={({ item }) =>
-                            <TouchableOpacity onLongPress={() => handleDeleteCounter(item.key)}>
+                            <TouchableOpacity onLongPress={() => deleteCounter(item.key)}>
                                 <View style={styles.taskWrapper}>
-                                    <TouchableOpacity onPress={() => handleCount(item.key)}>
+                                    <TouchableOpacity onPress={() => incrementCount(item.key)}>
                                         <Entypo
                                             name={"plus"}
                                             size={30}
@@ -78,7 +179,7 @@ const AddCounter = () => {
                                         <Text style={styles.task}>{item.text}</Text>
                                         <Text style={styles.count}> {item.count}</Text>
                                     </View>
-                                    <TouchableOpacity onPress={() => handleDecrement(item.key)}>
+                                    <TouchableOpacity onPress={() => decrementCount(item.key)}>
                                         <Entypo
                                             name={"minus"}
                                             size={30}
@@ -107,7 +208,7 @@ const AddCounter = () => {
                     colors={['#BB350F', '#EE540F', '#DD4E0C']}
                     style={{ padding: 17, borderRadius: 50, position: 'absolute', bottom: 8, right: 8 }}
                 >
-                    <TouchableOpacity onPress={() => handleAddCounter()}>
+                    <TouchableOpacity onPress={() => addCounter()}>
                         <AntDesign name="plus" size={35} color="white" />
                     </TouchableOpacity>
                 </LinearGradient>
@@ -183,9 +284,7 @@ const styles = StyleSheet.create({
         paddingLeft: 45,
         paddingTop: 2
     },
-    content:{
+    content: {
         justifyContent: "center"
     }
-
-
 })

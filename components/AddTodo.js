@@ -9,20 +9,20 @@ const AddTodo = () => {
     const [todos, setTodos] = useState([])
 
     useEffect(() => {
-        loadTodo();
+        if(todos != null) loadTodo();
     });
 
     const updateAsyncStorage = async (todos) => {
 
-            try {
+        try {
 
-                await AsyncStorage.removeItem('todos');
-                await AsyncStorage.setItem('todos', JSON.stringify(todos));
-  
-            } catch (e) {
+            await AsyncStorage.removeItem('todos');
+            await AsyncStorage.setItem('todos', JSON.stringify(todos));
 
-                alert(err)
-            }
+        } catch (e) {
+
+            alert(err)
+        }
 
     }
 
@@ -37,7 +37,7 @@ const AddTodo = () => {
             todos.push({ text: value, key: Math.random().toString(), checked: false });
             loadTodo();
             await updateAsyncStorage(todos);
-            
+
         } catch (err) {
 
             alert(err);
@@ -56,7 +56,7 @@ const AddTodo = () => {
 
         } catch (err) {
 
-            console.log(err)
+            alert(err)
 
         }
     }
@@ -66,8 +66,7 @@ const AddTodo = () => {
             todos.map(async (todo, i) => {
 
                 if (todo.key == id) {
-                    let index = todos.indexOf(todo);
-                    todos.splice(index, 1)
+                    todos.splice(i, 1)
                     await updateAsyncStorage(todos);
                     setTodos(todos);
                 }
@@ -78,25 +77,29 @@ const AddTodo = () => {
 
         }
     }
+
+    //added timeout to disable onPress() spam
     const checkedTodo = (id) => {
 
-        try {
+        setTimeout(() => {
+            try {
 
-            todos.map(async (todo, i) => {
+                todos.map(async (todo, i) => {
 
-                if (todo.key == id) {
-                    todo.checked = !todo.checked;
-                    await updateAsyncStorage(todos);
-                    setTodos(todos);
-                }
+                    if (todo.key == id) {
+                        todo.checked = !todo.checked;
+                        await updateAsyncStorage(todos);
+                        setTodos(todos);
+                    }
 
-            });
-        } catch (err) {
-            alert(err);
+                });
+            } catch (err) {
+                alert(err);
 
-        }
+            }
+        }, 300)
     }
- 
+
     return (
 
         <View style={styles.container}>
@@ -104,18 +107,17 @@ const AddTodo = () => {
                 <SafeAreaView >
                     <FlatList
                         style={styles.todoList}
-                        data={todos} 
-                        keyExtractor={item => item.key}         
+                        data={todos}
+                        keyExtractor={item => item.key}
                         renderItem={({ item }) =>
                             <View style={styles.taskWrapper}>
                                 <TouchableOpacity onPress={() => checkedTodo(item.key)}>
                                     <Entypo
                                         name={item.checked ? "circle-with-plus" : "circle"}
                                         size={30}
-                                        color="#BB350F"                                    
+                                        color="#BB350F"
                                     />
                                 </TouchableOpacity>
-
                                 <View>
                                     {item.checked && <View style={styles.verticalLine}></View>}
                                     <Text style={styles.task}>{item.text}</Text>
@@ -123,11 +125,10 @@ const AddTodo = () => {
                                 <AntDesign
                                     name="closesquare"
                                     size={30}
-                                    color="#BB350F"                         
+                                    color="#BB350F"
                                     onPress={() => removeTodo(item.key)}
                                 />
                             </View>}
-                        
                     />
                 </SafeAreaView>
             </View>
@@ -217,6 +218,4 @@ const styles = StyleSheet.create({
         flex: 1,
         marginTop: 32
     }
-
-
 })
