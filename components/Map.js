@@ -1,22 +1,13 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import MapView, { Marker, Callout } from 'react-native-maps';
-import * as Linking from 'expo-linking';
-import * as IntentLauncher from 'expo-intent-launcher';
 import getDirections from 'react-native-google-maps-directions';
 import get from 'lodash/get';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-const height = Dimensions.get('window').height;
-
 const deltas = {
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421
-};
-
-const initialRegion = {
-    latitude: 37.321996988,
-    longitude: -122.0325472123455
 };
 
 export default class Map extends Component {
@@ -25,6 +16,7 @@ export default class Map extends Component {
     }
 
     handleGetDirections = (id) => {
+        
         const data = {
             source: {
                 latitude: this.props.location.latitude,

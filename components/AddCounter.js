@@ -1,9 +1,8 @@
-import React, { Component, useState, useEffect } from 'react';
-import { StyleSheet, TextInput, View, Button, Modal, KeyboardAvoidingView, AsyncStorage } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, TextInput, View, AsyncStorage } from 'react-native';
 import { Keyboard, Alert, Text, TouchableOpacity, FlatList, SafeAreaView } from 'react-native';
 import { AntDesign, Entypo } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { set } from 'react-native-reanimated';
 
 const AddCounter = () => {
     const [value, setValue] = useState('')
@@ -92,28 +91,7 @@ const AddCounter = () => {
             { cancelable: false }
         )
     }
-
-    const checkedCounter = (id) => {
-
-        try {
-
-            counters.map(async (counter, i) => {
-
-                if (counter.key == id) {
-                    counter.checked = !counter.checked;
-                    await updateAsyncStorage(counters);
-                    setCounters(counters);
-                }
-
-            });
-        } catch (err) {
-            alert(err);
-
-        }
-
-    }
-
-    //added timeout to disable onPress() spam
+    //added timeout to prevent onPress() spam
     const incrementCount = (id) => {
         setTimeout(() => {
             try {

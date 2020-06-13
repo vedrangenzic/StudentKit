@@ -1,5 +1,5 @@
-import React, { Component, useState, useEffect } from 'react';
-import { StyleSheet, TextInput, View, Button, Modal, AsyncStorage, Keyboard } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, TextInput, View, AsyncStorage, Keyboard } from 'react-native';
 import { Text, TouchableOpacity, FlatList, SafeAreaView } from 'react-native';
 import { AntDesign, Entypo } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
