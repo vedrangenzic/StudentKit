@@ -91,7 +91,7 @@ const AddCounter = () => {
             { cancelable: false }
         )
     }
-    //added timeout to prevent onPress() spam
+    // added timeout to prevent onPress() spam
     const incrementCount = (id) => {
         setTimeout(() => {
             try {

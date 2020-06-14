@@ -78,7 +78,7 @@ const AddTodo = () => {
         }
     }
 
-    //added timeout to disable onPress() spam
+    // added timeout to prevent onPress() spam
     const checkedTodo = (id) => {
 
         setTimeout(() => {

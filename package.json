@@ -16,6 +16,7 @@
     "expo-linear-gradient": "^8.1.0",
     "expo-linking": "^1.0.1",
     "expo-permissions": "^8.1.0",
+    "geolib": "^3.3.1",
     "logkitty": "^0.7.1",
     "native-base": "2.13.8",
     "react": "~16.9.0",

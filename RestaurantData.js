@@ -16,15 +16,15 @@ const data = [
     {
         name: "KONZUM",
         coords: {
-            "latitude": 45.82668,
-            "longitude": 16.1097963
+            "latitude": 45.8242699,
+            "longitude": 16.1184532
         }
     },
     {
         name: "PETROL",
         coords: {
-            "latitude": 45.82404,
-            "longitude": 16.1293333
+            "latitude": 45.823895,
+            "longitude": 16.1308971
         }
     },
 ]

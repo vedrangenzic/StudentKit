@@ -4,6 +4,8 @@ import MapView, { Marker, Callout } from 'react-native-maps';
 import getDirections from 'react-native-google-maps-directions';
 import get from 'lodash/get';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { getPreciseDistance } from 'geolib';
+
 
 const deltas = {
     latitudeDelta: 0.0922,
@@ -16,8 +18,9 @@ export default class Map extends Component {
     }
 
     handleGetDirections = (id) => {
-        
+
         const data = {
+
             source: {
                 latitude: this.props.location.latitude,
                 longitude: this.props.location.longitude
@@ -41,21 +44,33 @@ export default class Map extends Component {
         getDirections(data)
     }
 
+    getDistance = (place) => {
+
+        const { location } = this.props;
+        const dist = getPreciseDistance(
+
+            { latitude: get(location, 'coords.latitude', null), longitude: get(location, 'coords.longitude', null) },
+            { latitude: get(place, 'coords.latitude', null), longitude: get(place, 'coords.longitude', null) }) / 1000;
+
+        return dist;
+    }
+
     renderMarkers() {
+
         return this.props.places.map((place, i) => (
 
             <Marker
                 key={i}
                 title={place.name}
                 coordinate={place.coords}
-                onCalloutPress={() => this.handleGetDirections(i, option)}
+                onCalloutPress={() => this.handleGetDirections(i)}
             >
                 <Callout tooltip>
                     <View>
                         <View style={styles.bubble}>
                             <View>
                                 <Text style={styles.name}>{place.name}</Text>
-                                <Text>A short description</Text>
+                                <Text>Distance: {(this.getDistance(place))} km</Text>
                             </View>
                             <MaterialCommunityIcons name="bullseye-arrow" size={40} color="dodgerblue" />
                         </View>

@@ -3,9 +3,7 @@ import { StyleSheet, TextInput, View, Button, Text } from 'react-native';
 import * as Permissions from 'expo-permissions';
 import * as Location from 'expo-location';
 import Map from '../components/Map';
-import get from 'lodash/get';
-import pick from 'lodash/pick';
-import data from '../RestaurantData'
+import data from '../RestaurantData';
 
 export default class MapScreen extends Component {
   state = {
@@ -19,8 +17,6 @@ export default class MapScreen extends Component {
 };
 
   getRestaurants = async () => {
-    const coords = get(this.state.location, 'coords');
-    const userLocation = pick(coords, ['latitude', 'longitude']);
     let restaurants = data;
     this.setState({ restaurants });
   };
