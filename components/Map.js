@@ -6,7 +6,6 @@ import get from 'lodash/get';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { getPreciseDistance } from 'geolib';
 
-
 const deltas = {
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421
@@ -51,7 +50,6 @@ export default class Map extends Component {
 
             { latitude: get(location, 'coords.latitude', null), longitude: get(location, 'coords.longitude', null) },
             { latitude: get(place, 'coords.latitude', null), longitude: get(place, 'coords.longitude', null) }) / 1000;
-
         return dist;
     }
 

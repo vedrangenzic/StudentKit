@@ -60,6 +60,7 @@ const AddCounter = () => {
 
         }
     }
+    
     const deleteCounter = (id) => {
         Alert.alert(
             'Delete',
@@ -91,6 +92,7 @@ const AddCounter = () => {
             { cancelable: false }
         )
     }
+
     // added timeout to prevent onPress() spam
     const incrementCount = (id) => {
         setTimeout(() => {
