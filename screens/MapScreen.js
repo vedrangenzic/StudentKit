@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { StyleSheet, TextInput, View, Button, Text } from 'react-native';
 import * as Permissions from 'expo-permissions';
 import * as Location from 'expo-location';
 import Map from '../components/Map';
 import data from '../RestaurantData';
+import Header from  '../components/Header';
 
 export default class MapScreen extends Component {
   state = {
@@ -12,11 +12,7 @@ export default class MapScreen extends Component {
     restaurants: []
   };
 
-  componentDidMount = () => {
-    this.getLocationAsync();
-};
-
-  getRestaurants = async () => {
+  getRestaurants = () => {
     let restaurants = data;
     this.setState({ restaurants });
   };
@@ -32,6 +28,10 @@ export default class MapScreen extends Component {
     this.setState({ location });
     this.getRestaurants();
   };
+  
+  componentDidMount = () => {
+    this.getLocationAsync();
+};
 
 
   render() {

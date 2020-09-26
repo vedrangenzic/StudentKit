@@ -9,8 +9,10 @@
   "dependencies": {
     "@expo/vector-icons": "^10.0.6",
     "@react-native-community/async-storage": "^1.11.0",
+    "@react-native-community/masked-view": "^0.1.10",
     "@react-navigation/bottom-tabs": "^5.2.5",
     "@react-navigation/native": "^5.1.4",
+    "@react-navigation/stack": "^5.9.0",
     "expo": "~37.0.3",
     "expo-intent-launcher": "^8.1.0",
     "expo-linear-gradient": "^8.1.0",
@@ -18,7 +20,6 @@
     "expo-permissions": "^8.1.0",
     "geolib": "^3.3.1",
     "logkitty": "^0.7.1",
-    "native-base": "2.13.8",
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-37.0.0.tar.gz",
@@ -36,7 +37,8 @@
     "react-native-spinkit": "^1.5.0",
     "react-native-swipe-list-view": "^2.5.0",
     "react-native-vector-icons": "^6.6.0",
-    "react-native-web": "~0.11.7"
+    "react-native-web": "~0.11.7",
+    "remixicon": "^2.5.0"
   },
   "devDependencies": {
     "@babel/core": "^7.8.6",
